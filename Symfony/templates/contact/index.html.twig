@@ -1,0 +1,91 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Contacts{% endblock %}
+
+{% block body %}
+    <main style="max-width: 960px; margin: 2rem auto; font-family: Arial, sans-serif;">
+        <h1>Contacts</h1>
+
+        {% for message in app.flashes('success') %}
+            <div style="padding: 0.75rem; margin-bottom: 1rem; background: #e8f5e9; border: 1px solid #66bb6a;">
+                {{ message }}
+            </div>
+        {% endfor %}
+
+        <section style="padding: 1rem; border: 1px solid #ddd; margin-bottom: 1.5rem;">
+            <h2 style="margin-top: 0;">Create contact</h2>
+
+            {{ form_start(contactForm) }}
+                {% if not contactForm.vars.valid %}
+                    <div style="padding: 0.75rem; margin-bottom: 1rem; background: #ffebee; border: 1px solid #ef5350;">
+                        Please fix the errors below and try again.
+                        <div style="margin-top: 0.5rem;">
+                            <ul style="margin: 0; padding-left: 1.25rem;">
+                                {% for error in contactForm.vars.errors %}
+                                    <li>{{ error.message }}</li>
+                                {% endfor %}
+                                {% for child in contactForm %}
+                                    {% for error in child.vars.errors %}
+                                        <li>{{ error.message }}</li>
+                                    {% endfor %}
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                {% endif %}
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div>
+                        {{ form_label(contactForm.firstName) }}
+                        {{ form_widget(contactForm.firstName) }}
+                    </div>
+                    <div>
+                        {{ form_label(contactForm.lastName) }}
+                        {{ form_widget(contactForm.lastName) }}
+                    </div>
+                    <div>
+                        {{ form_label(contactForm.email) }}
+                        {{ form_widget(contactForm.email) }}
+                    </div>
+                    <div style="align-self: end;">
+                        {{ form_label(contactForm.active) }}
+                        {{ form_widget(contactForm.active) }}
+                    </div>
+                </div>
+                <button type="submit">Save contact</button>
+            {{ form_end(contactForm) }}
+        </section>
+
+        <section>
+            <h2>Saved contacts</h2>
+
+            <table style="width: 100%; border-collapse: collapse;">
+                <thead>
+                    <tr>
+                        <th style="text-align: left; border-bottom: 1px solid #ccc;">UUID</th>
+                        <th style="text-align: left; border-bottom: 1px solid #ccc;">First name</th>
+                        <th style="text-align: left; border-bottom: 1px solid #ccc;">Last name</th>
+                        <th style="text-align: left; border-bottom: 1px solid #ccc;">Email</th>
+                        <th style="text-align: left; border-bottom: 1px solid #ccc;">Active</th>
+                        <th style="text-align: left; border-bottom: 1px solid #ccc;">Created</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for contact in contacts %}
+                        <tr>
+                            <td style="padding: 0.5rem 0;">{{ contact.id ? contact.id.toRfc4122() : '' }}</td>
+                            <td>{{ contact.firstName }}</td>
+                            <td>{{ contact.lastName }}</td>
+                            <td>{{ contact.email }}</td>
+                            <td>{{ contact.active ? 'Yes' : 'No' }}</td>
+                            <td>{{ contact.createdAt ? contact.createdAt|date('Y-m-d H:i') : '' }}</td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="6" style="padding: 0.75rem 0;">No contacts yet.</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </section>
+    </main>
+{% endblock %}
