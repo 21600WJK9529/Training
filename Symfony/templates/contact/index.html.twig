@@ -2,6 +2,44 @@
 
 {% block title %}Contacts{% endblock %}
 
+{% block javascripts %}
+    {{ parent() }}
+    {% if recaptchaEnabled and recaptchaSiteKey is not empty %}
+        <script src="https://www.google.com/recaptcha/api.js?render={{ recaptchaSiteKey|url_encode }}" async defer></script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const form = document.querySelector('form[name="{{ contactForm.vars.name }}"]');
+                const tokenField = document.getElementById('{{ contactForm.recaptchaToken.vars.id }}');
+
+                if (!form || !tokenField) {
+                    return;
+                }
+
+                form.addEventListener('submit', function (event) {
+                    if (form.dataset.recaptchaVerified === '1') {
+                        return;
+                    }
+
+                    event.preventDefault();
+
+                    if (typeof grecaptcha === 'undefined') {
+                        return;
+                    }
+
+                    grecaptcha.ready(function () {
+                        grecaptcha.execute('{{ recaptchaSiteKey|e('js') }}', {action: '{{ recaptchaAction|e('js') }}'})
+                            .then(function (token) {
+                                tokenField.value = token;
+                                form.dataset.recaptchaVerified = '1';
+                                form.submit();
+                            });
+                    });
+                });
+            });
+        </script>
+    {% endif %}
+{% endblock %}
+
 {% block body %}
     <main style="max-width: 960px; margin: 2rem auto; font-family: Arial, sans-serif;">
         <h1>Contacts</h1>
@@ -51,6 +89,7 @@
                         {{ form_widget(contactForm.active) }}
                     </div>
                 </div>
+                {{ form_widget(contactForm.recaptchaToken) }}
                 <button type="submit">Save contact</button>
             {{ form_end(contactForm) }}
         </section>

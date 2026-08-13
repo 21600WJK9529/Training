@@ -6,9 +6,6 @@
 
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
-parameters:
-    contact_admin_email: '%env(CONTACT_ADMIN_EMAIL)%'
-
 services:
     # default configuration for services in *this* file
     _defaults:
@@ -24,4 +21,17 @@ services:
     # please note that last definitions always *replace* previous ones
     App\Service\ContactNotificationService:
         arguments:
-            $contactAdminEmail: '%contact_admin_email%'
+            $logger: '@monolog.logger.contact_notification'
+            $contactFromEmail: '%app.contact_notifications.from_email%'
+            $contactFromName: '%app.contact_notifications.from_name%'
+            $contactAdminName: '%app.contact_notifications.admin_name%'
+            $contactAdminEmail: '%app.contact_notifications.admin_email%'
+
+    App\Service\RecaptchaVerifierService:
+        arguments:
+            $logger: '@monolog.logger.contact_notification'
+            $enabled: '%app.recaptcha.enabled%'
+            $siteKey: '%app.recaptcha.site_key%'
+            $secretKey: '%app.recaptcha.secret_key%'
+            $action: '%app.recaptcha.action%'
+            $minScore: '%app.recaptcha.min_score%'

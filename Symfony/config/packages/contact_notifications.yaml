@@ -1,0 +1,11 @@
+parameters:
+    app.contact_notifications.admin_email: '%env(CONTACT_ADMIN_EMAIL)%'
+    app.contact_notifications.admin_name: '%env(CONTACT_ADMIN_NAME)%'
+    app.contact_notifications.from_email: '%env(CONTACT_FROM_EMAIL)%'
+    app.contact_notifications.from_name: '%env(CONTACT_FROM_NAME)%'
+    app.recaptcha.enabled: '%env(bool:RECAPTCHA_ENABLED)%'
+    app.recaptcha.site_key: '%env(RECAPTCHA_SITE_KEY)%'
+    app.recaptcha.secret_key: '%env(RECAPTCHA_SECRET_KEY)%'
+    app.recaptcha.action: '%env(RECAPTCHA_V3_ACTION)%'
+    app.recaptcha.min_score: '%env(float:RECAPTCHA_V3_MIN_SCORE)%'
+
