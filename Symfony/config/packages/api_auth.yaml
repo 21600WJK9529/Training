@@ -1,0 +1,6 @@
+parameters:
+    app.api_auth.username: '%env(API_AUTH_USERNAME)%'
+    app.api_auth.password: '%env(API_AUTH_PASSWORD)%'
+    app.api_jwt.secret: '%env(API_JWT_SECRET)%'
+    app.api_jwt.ttl: '%env(int:API_JWT_TTL)%'
+

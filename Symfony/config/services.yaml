@@ -35,3 +35,14 @@ services:
             $secretKey: '%app.recaptcha.secret_key%'
             $action: '%app.recaptcha.action%'
             $minScore: '%app.recaptcha.min_score%'
+
+    App\Service\ApiJwtTokenService:
+        arguments:
+            $secret: '%app.api_jwt.secret%'
+            $ttl: '%app.api_jwt.ttl%'
+
+    App\Controller\ApiAuthController:
+        arguments:
+            $apiAuthUsername: '%app.api_auth.username%'
+            $apiAuthPassword: '%app.api_auth.password%'
+

@@ -1,0 +1,24 @@
+security:
+    firewalls:
+        dev:
+            # Ensure dev tools and static assets are always allowed
+            pattern: ^/(_profiler|_wdt|assets|build)/
+            security: false
+        api:
+            pattern: ^/api
+            stateless: true
+            custom_authenticators:
+                - App\Security\ApiJwtAuthenticator
+        main:
+            lazy: true
+
+    # Note: Only the *first* matching rule is applied
+    access_control:
+        - { path: ^/api/auth/token, roles: PUBLIC_ACCESS }
+        - { path: ^/api, roles: ROLE_API_USER }
+
+when@test:
+    security:
+        firewalls:
+            api:
+                stateless: true
